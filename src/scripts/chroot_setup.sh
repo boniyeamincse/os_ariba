@@ -34,7 +34,14 @@ DEBIAN_FRONTEND=noninteractive apt-get install -y \
     python3-pip \
     xfce4 \
     xfce4-goodies \
-    xserver-xorg
+    xserver-xorg \
+    firefox-esr \
+    vlc \
+    git \
+    curl \
+    wget \
+    pulseaudio \
+    mousepad
 
 # 4. Create User
 if ! id "user" &>/dev/null; then
@@ -68,6 +75,27 @@ if [ -f "/tmp/setup_security.sh" ]; then
     chmod +x /tmp/setup_security.sh
     /tmp/setup_security.sh
 fi
+
+# 5b. Create 'Install Ariba OS' Desktop Shortcut
+mkdir -p /usr/share/applications
+cat <<EOF > /usr/share/applications/install-ariba.desktop
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Install Ariba OS
+Comment=Install Ariba OS to disk
+Exec=xfce4-terminal -e "sudo /usr/local/bin/install_os.sh"
+Icon=drive-harddisk
+Terminal=false
+Categories=System;
+EOF
+
+# Ensure it appears on the desktop (for the 'user' account)
+# Note: In a chroot, /home/user might not be fully populated until boot, 
+# but we can try to place it if the home dir exists, or rely on /etc/skel.
+mkdir -p /etc/skel/Desktop
+cp /usr/share/applications/install-ariba.desktop /etc/skel/Desktop/
+chmod +x /etc/skel/Desktop/install-ariba.desktop
 
 # 6. Setup AI Service (Basic Systemd)
 cat <<EOF > /etc/systemd/system/ariba-ai.service
