@@ -1,0 +1,46 @@
+/* Ariba OS - Custom GTK3 Overrides */
+/* Place this in ~/.config/gtk-3.0/gtk.css */
+
+/* Define Brand Colors */
+@define-color ariba_blue #007bff;
+@define-color ariba_bg #1e1e2e;
+@define-color ariba_fg #cdd6f4;
+
+/* Applications Window Background */
+window {
+    background-color: @ariba_bg;
+    color: @ariba_fg;
+}
+
+/* Header Bars (Glassy look) */
+headerbar {
+    background-color: alpha(@ariba_bg, 0.85);
+    border-bottom: 1px solid alpha(@ariba_blue, 0.3);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+/* Buttons */
+button.suggested-action {
+    background-color: @ariba_blue;
+    color: white;
+    border-radius: 8px;
+    font-weight: bold;
+    transition: all 200ms ease;
+}
+
+button.suggested-action:hover {
+    background-image: linear-gradient(to bottom, shade(@ariba_blue, 1.1), shade(@ariba_blue, 0.9));
+    box-shadow: 0 4px 10px rgba(0,123,255, 0.3);
+}
+
+/* Entries */
+entry {
+    border-radius: 6px;
+    border: 1px solid alpha(@ariba_fg, 0.2);
+    background-color: alpha(black, 0.2);
+}
+
+entry:focus {
+    border-color: @ariba_blue;
+    box-shadow: 0 0 0 2px alpha(@ariba_blue, 0.3);
+}
