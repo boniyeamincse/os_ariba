@@ -41,7 +41,9 @@ DEBIAN_FRONTEND=noninteractive apt-get install -y \
     curl \
     wget \
     pulseaudio \
-    mousepad
+    mousepad \
+    ufw \
+    openssh-server
 
 # 4. Create User
 if ! id "user" &>/dev/null; then

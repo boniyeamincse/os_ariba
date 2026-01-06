@@ -15,7 +15,7 @@ echo "=== Building Ariba OS ISO ==="
 # Create Output Directory
 mkdir -p "$ISO_DIR"
 
-if [ ! -d "$ROOTFS_DIR" ] || [ -z "$(ls -A $ROOTFS_DIR)" ]; then
+if [ ! -d "$ROOTFS_DIR" ] || [ -z "$(ls -A "$ROOTFS_DIR")" ]; then
     echo "Error: RootFS not found or empty at $ROOTFS_DIR"
     echo "Please run 'sudo ./src/scripts/build_rootfs.sh' first."
     exit 1

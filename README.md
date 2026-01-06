@@ -37,6 +37,17 @@ You can build the Ariba OS root filesystem locally.
    ```
    This will create a `build/rootfs` directory containing the complete OS filesystem.
 
+## 💿 Installing to Disk
+
+To install Ariba OS to a physical hard drive (WARNING: Erases all data):
+
+1. Boot into the Ariba OS Live environment.
+2. Run the installer script:
+   ```bash
+   sudo /usr/local/bin/install_os.sh /dev/sdX
+   ```
+   Replace `/dev/sdX` with your target drive (e.g., `/dev/sda`).
+
 ## 🤖 Using the AI Agent
 
 The **Ariba AI Agent** runs as a system service but can also be used via CLI.
