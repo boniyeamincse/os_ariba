@@ -21,4 +21,7 @@ xfconf-query -c xsettings -p /Gtk/FontName -s "Inter Regular 10"
 xfconf-query -c xfwm4 -p /general/use_compositing -s true
 xfconf-query -c xfwm4 -p /general/frame_opacity -s 100
 
+# Set Wallpaper
+xfconf-query -c xfce4-desktop -p /backdrop/screen0/monitor0/workspace0/last-image -s /usr/share/backgrounds/ariba_wallpaper.jpg
+
 echo "Theme applied. Restart XFCE or log out/in to see changes."

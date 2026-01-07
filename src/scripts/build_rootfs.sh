@@ -45,16 +45,29 @@ chmod +x "$ROOTFS_DIR/tmp/chroot_setup.sh"
 
 # 4. Copy Custom Components to RootFS
 # AI Agent
-mkdir -p "$ROOTFS_DIR/opt/ariba/ai"
-cp "$WORK_DIR/src/ai/ariba_agent.py" "$ROOTFS_DIR/opt/ariba/ai/"
+mkdir -p "$ROOTFS_DIR/opt/ariba/agent"
+cp "$WORK_DIR/src/ai/ariba_agent.py" "$ROOTFS_DIR/opt/ariba/agent/"
 
 # GUI Scripts
-mkdir -p "$ROOTFS_DIR/opt/ariba/gui"
-cp "$WORK_DIR/src/gui/"*.py "$ROOTFS_DIR/opt/ariba/gui/" 2>/dev/null || true
+mkdir -p "$ROOTFS_DIR/opt/ariba/installer"
+mkdir -p "$ROOTFS_DIR/opt/ariba/store"
+mkdir -p "$ROOTFS_DIR/opt/ariba/tools"
+
+# Distribute GUI Apps
+cp "$WORK_DIR/src/gui/welcome_app.py" "$ROOTFS_DIR/opt/ariba/installer/" 2>/dev/null || true
+cp "$WORK_DIR/src/gui/installer_app.py" "$ROOTFS_DIR/opt/ariba/installer/" 2>/dev/null || true
+cp "$WORK_DIR/src/gui/software_center.py" "$ROOTFS_DIR/opt/ariba/store/" 2>/dev/null || true
+cp "$WORK_DIR/src/gui/ariba_personalizer.py" "$ROOTFS_DIR/opt/ariba/tools/" 2>/dev/null || true
+
+# Installer Logic
+cp "$WORK_DIR/src/scripts/install_os.sh" "$ROOTFS_DIR/opt/ariba/installer/"
+chmod +x "$ROOTFS_DIR/opt/ariba/installer/install_os.sh"
 
 # Config Files
-mkdir -p "$ROOTFS_DIR/opt/ariba/config"
-cp -r "$WORK_DIR/src/config/"* "$ROOTFS_DIR/opt/ariba/config/" 2>/dev/null || true
+mkdir -p "$ROOTFS_DIR/etc/ariba"
+cp -r "$WORK_DIR/src/config/"* "$ROOTFS_DIR/etc/ariba/" 2>/dev/null || true
+# Keep /opt/ariba/config for now if referenced elsewhere, but user wants /etc/ariba/os.conf etc.
+# We will rely on chroot_setup to create specific conf files if not in src/config.
 
 # Security Setup Script
 cp "$WORK_DIR/src/scripts/setup_security.sh" "$ROOTFS_DIR/tmp/"

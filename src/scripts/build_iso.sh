@@ -41,7 +41,41 @@ if command -v grub-mkrescue &> /dev/null; then
     echo "[+] ISO Saved to: $OUTPUT_ISO"
 else
     echo "Warning: grub-mkrescue not found. Skipping ISO generation."
-    # Create a dummy file for verification if tools are missing (for dev environment only)
-    touch "$OUTPUT_ISO"
     echo "[!] Created mock ISO at $OUTPUT_ISO (Real tools missing)"
+fi
+
+# 5. Kernel & Bootloader Setup
+echo "[*] Setting up Bootloader..."
+
+# Copy Kernel & Initrd from RootFS
+# Note: We take the latest installed kernel symlinks
+if [ -L "$ROOTFS_DIR/vmlinuz" ]; then
+    cp -L "$ROOTFS_DIR/vmlinuz" "$STAGING_DIR/boot/vmlinuz"
+    cp -L "$ROOTFS_DIR/initrd.img" "$STAGING_DIR/boot/initrd.img"
+else
+    # Fallback if symlinks are missing (grab the first one found)
+    cp $(ls "$ROOTFS_DIR/boot/vmlinuz-"* | head -n 1) "$STAGING_DIR/boot/vmlinuz"
+    cp $(ls "$ROOTFS_DIR/boot/initrd.img-"* | head -n 1) "$STAGING_DIR/boot/initrd.img"
+fi
+
+# Create GRUB Config
+cat <<EOF > "$STAGING_DIR/boot/grub/grub.cfg"
+set default=0
+set timeout=5
+
+menuentry "Start Ariba OS Live" {
+    linux /boot/vmlinuz boot=live quiet splash
+    initrd /boot/initrd.img
+}
+
+menuentry "Install Ariba OS" {
+    linux /boot/vmlinuz boot=live quiet splash
+    initrd /boot/initrd.img
+}
+EOF
+
+echo "[*] Regenerating ISO with Bootloader..."
+if command -v grub-mkrescue &> /dev/null; then
+    grub-mkrescue -o "$OUTPUT_ISO" "$STAGING_DIR"
+    echo "[+] Bootable ISO Saved to: $OUTPUT_ISO"
 fi
